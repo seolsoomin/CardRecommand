@@ -1,6 +1,5 @@
 let currentDate = new Date();
 
-// 임시 지출 데이터 
 let expenses = {
     
 };
@@ -58,11 +57,13 @@ function renderCalendar(date) {
 }
 
 document.getElementById('prevMonth').addEventListener('click', () => {
+    currentDate.setDate(1); 
     currentDate.setMonth(currentDate.getMonth() - 1);
     renderCalendar(currentDate);
 });
 
 document.getElementById('nextMonth').addEventListener('click', () => {
+    currentDate.setDate(1); 
     currentDate.setMonth(currentDate.getMonth() + 1);
     renderCalendar(currentDate);
 });
