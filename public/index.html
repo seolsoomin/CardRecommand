@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 신한카드 추천 서비스</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <section class="calendar-section">
+            <div class="calendar-header">
+                <button id="prevMonth">◀</button>
+                <h3 id="currentMonthYear">2025년 10월</h3>
+                <button id="nextMonth">▶</button>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+                <div class="day-header">일</div>
+                <div class="day-header">월</div>
+                <div class="day-header">화</div>
+                <div class="day-header">수</div>
+                <div class="day-header">목</div>
+                <div class="day-header">금</div>
+                <div class="day-header">토</div>
+            </div>
+            <div class="date-output-box">
+                <p class="click-info">날짜 셀을 클릭하면, 해당 날짜의 지출을 아래에 표시합니다.</p>
+                <div id="selectedDateOutput" class="selected-date-output">
+                    </div>
+                <div id="expenseInputForm" class="expense-input-form" style="display: none;">
+                    <button class="add-expense-btn" onclick="showExpenseEditor()">+ 버튼</button>
+                </div>
+            </div>
+            <div id="expenseEditor" class="expense-editor" style="display: none;">
+                <h4>지출 상세 입력</h4>
+                <input type="text" id="expenseTag" placeholder="태그 (예: 식비)">
+                <input type="number" id="expenseAmount" placeholder="금액">
+                <input type="text" id="expenseMemo" placeholder="간단 메모">
+                <button onclick="saveExpense()">저장</button>
+                <button onclick="hideExpenseEditor()">취소</button>
+            </div>
+        </section>
+
+        <section class="summary-section">
+            <div class="receipt-style-box">
+                <div class="receipt-header">
+                    <p><span id="summaryMonth">2025년 10월</span></p>
+                    <h2>receipt</h2>
+                </div>
+                <ul id="tagSummaryList" class="tag-summary-list">
+                    </ul>
+                <div class="receipt-divider"></div>
+                <div class="total-summary">
+                    <strong>총 지출:</strong>
+                    <span id="totalAmount">0 원</span>
+                </div>
+                <div class="receipt-footer">
+                </div>
+            </div>
+        </section>
+
+        <section class="card-recommendation-section">
+            <button class="recommend-btn">카드 추천 받기</button>
+            
+            <div id="cardRecommendations" class="card-recommendations">
+                </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
