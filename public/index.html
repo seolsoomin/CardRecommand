@@ -45,7 +45,7 @@
             <div id="expenseEditor" class="expense-editor" style="display: none;">
                 <h4>지출 상세 입력</h4>
                 <input type="text" id="expenseTag" placeholder="태그 (예: 식비)">
-                <input type="number" id="expenseAmount" placeholder="금액" step="1000">
+                <input type="number" id="expenseAmount" placeholder="금액" step="1000" min="0">
                 <input type="text" id="expenseMemo" placeholder="메모">
                 <button onclick="saveExpense()">저장</button>
                 <button onclick="hideExpenseEditor()">취소</button>
