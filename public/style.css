@@ -1,0 +1,343 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+.container {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 2fr 1fr 1fr;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #555;
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #eee;
+}
+
+.calendar-section {
+    grid-column: 1 / 2;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.calendar-header button {
+    background: #5B92E5;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s;
+}
+
+.calendar-header button:hover {
+    background-color: #5B92E5;
+}
+
+#currentMonthYear {
+    font-size: 1.4em;
+    margin: 0;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.day-header {
+    background-color: #f0f8ff;
+    padding: 10px 5px;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+}
+
+.date-cell {
+    padding: 10px 5px;
+    cursor: pointer;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.1s;
+    min-height: 50px;
+    position: relative;
+    user-select: none;
+}
+
+.date-cell:nth-child(7n) {
+    border-right: none;
+}
+
+.date-cell.empty {
+    background-color: #f9f9f9;
+    cursor: default;
+}
+
+.date-cell:not(.empty):hover {
+    background-color: #87CEFA;
+}
+
+.date-cell.selected {
+    background-color: #5B92E5;
+    color: white;
+    font-weight: bold;
+    z-index: 1;
+}
+
+.date-cell-number {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.date-expense {
+    font-size: 0.75em;
+    color: #5B92E5;
+    font-weight: 500;
+}
+
+.date-cell.selected .date-expense {
+    color: #fff;
+}
+
+.date-output-box {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    background-color: #fafafa;
+}
+
+.click-info {
+    font-style: italic;
+    color: #999;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+.selected-date-output p {
+    margin: 5px 0;
+    font-size: 1.1em;
+    border-bottom: 1px dotted #ddd;
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+
+.selected-date-output p:hover {
+    background-color: #f0f0f0;
+}
+
+.add-expense-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #5B92E5;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.expense-editor {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    width: 300px;
+    border: 3px solid #5B92E5;
+}
+
+.expense-editor input, .expense-editor button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+.expense-editor button {
+    background-color: #5B92E5;
+    color: white;
+    cursor: pointer;
+}
+.expense-editor button:nth-child(6) {
+    background-color: #aaa;
+}
+
+
+.summary-section {
+    grid-column: 2 / 3;
+}
+
+.receipt-style-box {
+    padding: 5px;
+    background-color: #fff;
+}
+
+.receipt-header {
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #333;
+    margin-bottom: 15px;
+}
+
+.receipt-header h3 {
+    margin: 5px 0;
+    font-size: 1.2em;
+}
+
+.tag-summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+}
+
+.tag-summary-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    font-size: 0.95em;
+}
+
+.receipt-divider {
+    border-bottom: 3px double #333;
+    margin-bottom: 15px;
+}
+
+.total-summary {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 15px;
+    padding: 5px 0;
+}
+
+.receipt-footer {
+    text-align: center;
+    font-size: 0.8em;
+    color: #666;
+}
+
+.card-recommendation-section {
+    grid-column: 3 / 4;
+}
+
+.recommendation-info {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    padding: 15px;
+    border-radius: 6px;
+    line-height: 1.4;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.recommend-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #5B92E5;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.recommend-btn:hover {
+    background-color: #87CEFA;
+}
+
+.card-recommendations {
+    margin-top: 20px;
+}
+
+.card-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    background-color: #f8f9fa;
+    display: flex;
+    gap: 10px;
+}
+
+.card-image-box {
+    width: 50px;
+    height: 35px;
+    background-color: #ccc;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7em;
+    font-weight: bold;
+}
+
+.card-details h4 {
+    margin: 0 0 5px 0;
+    font-size: 1em;
+    color: #007bff;
+}
+
+.card-details p {
+    margin: 3px 0;
+    font-size: 0.9em;
+}
+
+.card-details strong {
+    color: #28a745;
+}
+
+@media (max-width: 1200px) {
+    .container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .calendar-section {
+        grid-column: 1 / 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+
+    .calendar-section, .summary-section, .card-recommendation-section {
+        grid-column: 1 / 2;
+    }
+}
