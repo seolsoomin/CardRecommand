@@ -4,6 +4,21 @@ let expenses = {
     
 };
 
+const predefinedTags = [
+    '구독',
+    '대중교통',
+    '대형마트',
+    '레저/스포츠',
+    '쇼핑',
+    '여행/숙박',
+    '영화/공연',
+    '외식/배달',
+    '주유',
+    '카페/베이커리',
+    '통신/렌탈',
+    '편의점'
+];
+
 function renderCalendar(date) {
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -88,19 +103,49 @@ function handleDateClick(cell) {
     if (dailyExpenses.length > 0) {
         outputDiv.innerHTML = `<h4>${dateKey} 지출 내역</h4>`;
         dailyExpenses.forEach((item, index) => {
-            const expenseP = document.createElement('p');
-            expenseP.innerHTML = `${item.tag} / ${item.amount.toLocaleString()} 원 <br> <span style="font-size:0.8em; color:#999;">${item.memo || '메모 없음'}</span>`;
+            const expenseDiv = document.createElement('div');
+            expenseDiv.classList.add('expense-item');
+            expenseDiv.innerHTML = `
+                <p>
+                    ${item.tag} / ${item.amount.toLocaleString()} 원 
+                    <br> 
+                    <span style="font-size:0.8em; color:#999;">${item.memo || '메모 없음'}</span>
+                </p>
+                <div class="expense-actions">
+                    <button class="edit-btn" data-index="${index}">수정</button>
+                    <button class="delete-btn" data-index="${index}">삭제</button>
+                </div>
+            `;
             
-            expenseP.addEventListener('click', () => {
+            expenseDiv.querySelector('.edit-btn').addEventListener('click', () => {
                 editExpense(dateKey, index);
             });
-            outputDiv.appendChild(expenseP);
+            
+            expenseDiv.querySelector('.delete-btn').addEventListener('click', () => {
+                deleteExpense(dateKey, index);
+            });
+
+            outputDiv.appendChild(expenseDiv);
         });
     } else {
         outputDiv.innerHTML = `<p style="text-align:center; color:#999;">입력된 지출 내역이 없습니다.</p>`;
     }
 
     document.getElementById('expenseInputForm').style.display = 'block';
+}
+
+function renderTagSelectOptions() {
+    const selectElement = document.getElementById('expenseTag');
+    while (selectElement.children.length > 1) {
+        selectElement.removeChild(selectElement.lastChild);
+    }
+
+    predefinedTags.forEach(tag => {
+        const option = document.createElement('option');
+        option.value = tag;
+        option.textContent = tag;
+        selectElement.appendChild(option);
+    });
 }
 
 function showExpenseEditor(dateKey = selectedDateElement ? selectedDateElement.dataset.date : null, index = -1) {
@@ -112,13 +157,13 @@ function showExpenseEditor(dateKey = selectedDateElement ? selectedDateElement.d
     const editor = document.getElementById('expenseEditor');
     editor.style.display = 'block';
     
-    document.getElementById('expenseTag').value = '';
+    document.getElementById('expenseTag').value = ''; 
     document.getElementById('expenseAmount').value = '';
     document.getElementById('expenseMemo').value = '';
     
     if (index !== -1) {
         const item = expenses[dateKey][index];
-        document.getElementById('expenseTag').value = item.tag;
+        document.getElementById('expenseTag').value = item.tag; 
         document.getElementById('expenseAmount').value = item.amount;
         document.getElementById('expenseMemo').value = item.memo;
         editor.dataset.editIndex = index;
@@ -137,12 +182,12 @@ function saveExpense() {
     const dateKey = editor.dataset.dateKey;
     const editIndex = editor.dataset.editIndex;
     
-    const tag = document.getElementById('expenseTag').value;
+    const tag = document.getElementById('expenseTag').value; 
     const amount = parseInt(document.getElementById('expenseAmount').value, 10);
     const memo = document.getElementById('expenseMemo').value;
 
     if (!dateKey || !tag || isNaN(amount) || amount <= 0) {
-        alert('태그와 유효한 금액을 입력해 주세요.');
+        alert('유효한 태그와 금액을 선택/입력해 주세요.');
         return;
     }
 
@@ -166,6 +211,19 @@ function saveExpense() {
 
 function editExpense(dateKey, index) {
     showExpenseEditor(dateKey, index);
+}
+
+function deleteExpense(dateKey, index) {
+    if (confirm('이 지출 항목을 정말 삭제하시겠습니까?')) {
+        expenses[dateKey].splice(index, 1);
+
+        if (expenses[dateKey].length === 0) {
+            delete expenses[dateKey];
+        }
+
+        handleDateClick(selectedDateElement);
+        renderCalendar(currentDate);
+    }
 }
 
 function updateMonthlySummary(year, month) {
@@ -225,4 +283,5 @@ document.querySelector('.recommend-btn').addEventListener('click', () => {
 
 window.onload = () => {
     renderCalendar(currentDate);
+    renderTagSelectOptions();
 };
