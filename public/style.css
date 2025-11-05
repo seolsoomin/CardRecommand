@@ -139,17 +139,57 @@ section {
     text-align: center;
 }
 
-.selected-date-output p {
-    margin: 5px 0;
-    font-size: 1.1em;
+/* --- 지출 항목 수정 및 삭제를 위한 새로운 스타일 --- */
+
+.expense-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
     border-bottom: 1px dotted #ddd;
-    padding-bottom: 5px;
-    cursor: pointer;
 }
 
-.selected-date-output p:hover {
-    background-color: #f0f0f0;
+.expense-item p {
+    margin: 0;
+    flex-grow: 1;
+    cursor: default;
+    line-height: 1.4;
 }
+
+.expense-item:hover {
+    background-color: #f0f0f0; 
+}
+
+.expense-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.expense-actions button {
+    padding: 3px 8px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.expense-actions .edit-btn {
+    background-color: #5B92E5;
+    color: white;
+}
+
+.expense-actions .delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.expense-actions button:hover {
+    opacity: 0.8;
+}
+
+/* ----------------------------------------------- */
 
 .add-expense-btn {
     display: block;
@@ -178,7 +218,7 @@ section {
     border: 3px solid #5B92E5;
 }
 
-.expense-editor input, .expense-editor button {
+.expense-editor input, .expense-editor select, .expense-editor button {
     display: block;
     width: 100%;
     margin-bottom: 10px;
@@ -186,6 +226,8 @@ section {
     border-radius: 4px;
     border: 1px solid #ccc;
     box-sizing: border-box;
+    font-size: 1em; 
+    height: 40px; 
 }
 
 .expense-editor button[onclick^="saveExpense"] {
@@ -197,7 +239,7 @@ section {
 }
 
 .expense-editor button[onclick="hideExpenseEditor()"] {
-    background-color: #aaa(0, 0%, 62%);
+    background-color: #aaa;
     color: white;
     cursor: pointer;
     border: none;
