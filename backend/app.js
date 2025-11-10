@@ -6,7 +6,6 @@ const port = 3000; //포트 번호 설정
 
 app.use(express.static(__dirname + '/public'));
 
-
 app.use(express.json()); //json 사용한다고 선언
 app.use(express.urlencoded({extended : true})); //쓸지는 모르겠는데 혹시 모르니까...
 
@@ -24,4 +23,5 @@ app.listen(port, () => {
 
 const errorhandler = require("./middlewares/errorhandler.js");
 app.use(errorhandler);
+
 
