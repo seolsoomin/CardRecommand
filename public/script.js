@@ -177,7 +177,7 @@ function hideExpenseEditor() {
     document.getElementById('expenseEditor').style.display = 'none';
 }
 
-function saveExpense() {
+async function saveExpense() {
     const editor = document.getElementById('expenseEditor');
     const dateKey = editor.dataset.dateKey;
     const editIndex = editor.dataset.editIndex;
@@ -207,6 +207,56 @@ function saveExpense() {
     
     handleDateClick(selectedDateElement);
     renderCalendar(currentDate);
+
+    if(expenses[dateKey][parseInt(editIndex, 10)]){
+        fetch("http://localhost:3000/api/update", {
+            method : "PUT",
+            headers : {
+                "Content-type" : "application/json"
+            },
+            body : JSON.stringify({
+                spendDate : dateKey,
+                tag : tag,
+                howMuch : amount,
+                memo : memo,
+                o_Tag : expenses[dateKey][parseInt(editIndex, 10)].tag,
+                o_howMuch : expenses[dateKey][parseInt(editIndex, 10)].amount,
+                o_memo : expenses[dateKey][parseInt(editIndex, 10)].memo
+            })
+        })
+        .then((response) => {
+            if(!response.ok){
+                throw new Error("서버 오류 : " + response.status);
+            }
+
+            return response.json();
+        })
+        .then((data) => console.log(data))
+        .catch(error => console.log(`에러 발생 : ${error}`));
+    }else{
+        fetch("http://localhost:3000/api/save", { //backend로 데이터 넘겨줌.
+        method : "POST", //method ==> POST
+        headers : { //헤더 설정
+            "Content-type" : "application/json"
+        },
+        body : JSON.stringify({ //body 설정
+            spendDate : dateKey,
+            tag : tag,
+            howMuch : amount,
+            memo : memo
+        }),
+    })
+    .then((response) => { //promise
+        if(!response.ok){ //만약 성공하지 않았을 경우 처리
+            throw new Error("서버 오류 : " + response.status);
+        }
+
+        return response.json(); //아닌 경우 성공한거 보여줌
+    })
+    .then((data) => console.log(data)) //넘어간 데이터 출력.
+    .catch((error) => console.log(`에러 발생 : ${error}`)); //에러 발생을 알리고 어떤 오류 발생했는지 알려줌
+    }   
+
 }
 
 function editExpense(dateKey, index) {
@@ -214,6 +264,9 @@ function editExpense(dateKey, index) {
 }
 
 function deleteExpense(dateKey, index) {
+
+    const deleteItem = expenses[dateKey][index];
+
     if (confirm('이 지출 항목을 정말 삭제하시겠습니까?')) {
         expenses[dateKey].splice(index, 1);
 
@@ -224,6 +277,28 @@ function deleteExpense(dateKey, index) {
         handleDateClick(selectedDateElement);
         renderCalendar(currentDate);
     }
+
+    fetch('http://localhost:3000/api/delete', { //fetch, 데이터 넘겨 줄 링크 
+        method : "PUT", //메소드 PUT
+        headers : { //header 설정
+            "Content-type" : "application/json"
+        },
+        body : JSON.stringify({ //body 내용 지정, json
+            spendDate : dateKey,
+            tag : deleteItem.tag,
+            howMuch : deleteItem.amount,
+            memo : deleteItem.memo
+        })
+    })
+    .then((response) => { //promise
+        if(!response.ok){ //만약 성공하지 않았을 경우 처리
+            throw new Error("서버 오류 : " + response.status);
+        }
+
+        return response.json(); //아닌 경우 성공한거 보여줌
+    })
+    .then((data) => console.log(data)) //응답 출력?
+    .catch((error) => console.log(`에러 발생 : ${error}`)); //에러 발생을 알리고 어떤 오류가 발생했는지 알려줌
 }
 
 function updateMonthlySummary(year, month) {
@@ -254,6 +329,8 @@ function updateMonthlySummary(year, month) {
     }
     
     document.getElementById('totalAmount').textContent = grandTotal.toLocaleString() + ' 원';
+
+    
 }
 
 document.querySelector('.recommend-btn').addEventListener('click', () => {
