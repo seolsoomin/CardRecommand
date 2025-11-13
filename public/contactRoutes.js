@@ -72,16 +72,18 @@ router
     let conn; //db 연결 관련 변수
     const {spendDate, tag, howMuch, memo, o_Tag, o_howMuch, o_memo} = req.body; //front에서 데이터 가져옴 by fetch
 
+    console.log(req.body);
+
     if(memo === `undefined`){
         memo = null;
     } else if(o_memo === `undefined`){
         o_memo = null;
     }
-    
+
     try{
         conn = await pool.getConnection();//db 연결
 
-        await conn.query("UPDATE spendtbl SET tag = ?, howMuch = ?, memo = ? WHERE spendDate = ? AND tag = ? AND howMuch = ?", [tag, howMuch, memo, spendDate, o_Tag, o_howMuch, o_memo]);
+        await conn.query("UPDATE spendtbl SET tag = ?, howMuch = ?, memo = ? WHERE spendDate = ? AND tag = ?", [tag, howMuch, memo, spendDate, o_Tag, o_howMuch, o_memo]);
 
         console.log("update success");
         res.status(200).json({success : true, message : "수정 성공"});
