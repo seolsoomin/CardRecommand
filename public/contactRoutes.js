@@ -40,36 +40,18 @@ router
             conn.release(); //db 연결 해제
     }
 })
-.put("/update", async(req, res, next) => { //자료 수정 요청이 있을 때 업데이트 해줌
-    let conn;
-    const {} = req.body;
-
-    try{
-        conn.getConnection();//db 연결
-
-        const result = await conn.query("");
-
-        res.status(200).json({success : true, message : "수정 성공"});
-
-    }
-    catch (err) { //오류처리
-        console.log(`오류 발생 : ${err}`); //오류 발생했음을 알리고, 어떠한 오류인지 출력
-
-        const error = new Error('저장에 실패하였습니다.'); //errorhandler 이용한 오류 처리 (미들웨어)
-        error.status = 500;
-        next(error);
-    }
-    finally{
-        conn.release(); //db 연결 해제
-    }
-})
 .put("/delete", async(req, res, next) => { //삭제 요청이 들어왔을 때 데이터 삭제. delete로 요청을 하는 것이 맞지만, body가 들어있으면 작동이 잘 되지 않아 put을 이용
     let conn;
-    const {spendDate, tag, howMuch} = req.body;
+    const {spendDate, tag, howMuch, memo} = req.body;
+
+    if(memo === 'undefined'){
+        memo == null;
+    }
+
     try{
         conn = await pool.getConnection();
 
-        await conn.query("DELETE FROM spendtbl WHERE spendDate  = ? AND tag = ? AND howMuch = ? LIMIT 1", [spendDate, tag, howMuch]);
+        await conn.query("DELETE FROM spendtbl WHERE spendDate  = ? AND tag = ? AND howMuch = ? AND memo = ?", [spendDate, tag, howMuch, memo]);
         
         console.log('delete success.');
         res.status(200).json({success : true, message : "삭제 성공"});
@@ -84,6 +66,35 @@ router
     finally{
         if(conn)
             conn.release();
+    }
+})
+.put("/update", async(req, res, next) => { //자료 수정 요청이 있을 때 업데이트 해줌
+    let conn; //db 연결 관련 변수
+    const {spendDate, tag, howMuch, memo, o_Tag, o_howMuch, o_memo} = req.body; //front에서 데이터 가져옴 by fetch
+
+    if(memo === `undefined`){
+        memo = null;
+    } else if(o_memo === `undefined`){
+        o_memo = null;
+    }
+    
+    try{
+        conn = await pool.getConnection();//db 연결
+
+        await conn.query("UPDATE spendtbl SET tag = ?, howMuch = ?, memo = ? WHERE spendDate = ? AND tag = ? AND howMuch = ?", [tag, howMuch, memo, spendDate, o_Tag, o_howMuch, o_memo]);
+
+        console.log("update success");
+        res.status(200).json({success : true, message : "수정 성공"});
+    }
+    catch (err) { //오류처리
+        console.log(`오류 발생 : ${err}`); //오류 발생했음을 알리고, 어떠한 오류인지 출력
+
+        const error = new Error('저장에 실패하였습니다.'); //errorhandler 이용한 오류 처리 (미들웨어)
+        error.status = 500;
+        next(error);
+    }
+    finally{
+        conn.release(); //db 연결 해제
     }
 });
 
