@@ -4,7 +4,7 @@ const router = express.Router();
 const pool = require("../maria"); //mariadb와 nodejs 연결
 
 router
-.post("/", async(req, res, next) => { //사용자가 데이터 입력 했을 때
+.post("/save", async(req, res, next) => { //사용자가 데이터 입력 했을 때
     let conn; //연결 관련 변수
     const {spendDate, tag, howMuch, memo} = req.body; //body의 정보 가져옴
 
@@ -23,12 +23,10 @@ router
             next(error);
         }
 
-        const sql = "INSERT INTO spendtbl (spendDate, tag, howMuch, memo) VALUES (?, ?, ?, ?)"; //sql문
-
-        await conn.query(sql, [spendDate, tag, howMuch, memo]); //db에서 sql문 실행과 ?에 대한 인자.
+        const sql = await conn.query("INSERT INTO spendtbl (spendDate, tag, howMuch, memo) VALUES (?, ?, ?, ?)", [spendDate, tag, howMuch, memo]); //db에서 sql문 실행과 ?에 대한 인자.
 
         console.log("save success."); //성공 했을음 출력
-        res.status(201).json({success : true, message : "저장 성공", id : sql.insertId}); //201 상태 설정하고, json으로 응답 넘김.
+        res.status(201).json({success : true, message : "저장 성공"}); //201 상태 설정하고, json으로 응답 넘김.
     }
     catch (err){
         console.log(`오류 발생 : ${err}`); //오류 발생했음을 알리고, 어떠한 오류인지 출력
@@ -42,13 +40,14 @@ router
             conn.release(); //db 연결 해제
     }
 })
-.put("/", async(req, res, next) => { //자료 수정 요청이 있을 때 업데이트 해줌
+.put("/update", async(req, res, next) => { //자료 수정 요청이 있을 때 업데이트 해줌
     let conn;
+    const {} = req.body;
 
     try{
         conn.getConnection();//db 연결
 
-        // const sql; //sql문
+        const result = await conn.query("");
 
         res.status(200).json({success : true, message : "수정 성공"});
 
@@ -64,16 +63,16 @@ router
         conn.release(); //db 연결 해제
     }
 })
-.delete("/:id", async(req, res, next) => { //삭제 요청이 들어왔을 때 데이터 삭제 해줌.
+.put("/delete", async(req, res, next) => { //삭제 요청이 들어왔을 때 데이터 삭제. delete로 요청을 하는 것이 맞지만, body가 들어있으면 작동이 잘 되지 않아 put을 이용
     let conn;
-
+    const {spendDate, tag, howMuch} = req.body;
     try{
         conn = await pool.getConnection();
 
-        const sql = 'DELETE FROM spendtbl WHERE id = ?';
-
+        await conn.query("DELETE FROM spendtbl WHERE spendDate  = ? AND tag = ? AND howMuch = ? LIMIT 1", [spendDate, tag, howMuch]);
+        
+        console.log('delete success.');
         res.status(200).json({success : true, message : "삭제 성공"});
-
     }
     catch (err) {
         console.log(`오류 발생 : ${err}`);
