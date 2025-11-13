@@ -42,21 +42,21 @@ router
 })
 .put("/delete", async(req, res, next) => { //삭제 요청이 들어왔을 때 데이터 삭제. delete로 요청을 하는 것이 맞지만, body가 들어있으면 작동이 잘 되지 않아 put을 이용
     let conn;
-    const {spendDate, tag, howMuch, memo} = req.body;
+    const {spendDate, tag, howMuch, memo} = req.body; //fetch 통해 데이터 가져옴
 
-    if(memo === 'undefined'){
+    if(memo === 'undefined'){ //만약에 memo가 undefined로 되어있으면, 일단 null로 바꿔줌
         memo == null;
     }
 
     try{
-        conn = await pool.getConnection();
+        conn = await pool.getConnection(); //db 연결
 
-        await conn.query("DELETE FROM spendtbl WHERE spendDate  = ? AND tag = ? AND howMuch = ? AND memo = ?", [spendDate, tag, howMuch, memo]);
+        await conn.query("DELETE FROM spendtbl WHERE spendDate  = ? AND tag = ? AND howMuch = ? AND memo = ?", [spendDate, tag, howMuch, memo]); //DELETE sql문 실행
         
-        console.log('delete success.');
-        res.status(200).json({success : true, message : "삭제 성공"});
+        console.log('delete success.'); //삭제 성공 알림 
+        res.status(200).json({success : true, message : "삭제 성공"}); //status 200으로 설정하고, json으로 넘김
     }
-    catch (err) {
+    catch (err) { //오류 발생 시 오류 발생 띄우고 미들웨어한테 오류 처리 맡김
         console.log(`오류 발생 : ${err}`);
 
         const error = new Error("삭제를 실패하였습니다.");
@@ -65,20 +65,16 @@ router
     }
     finally{
         if(conn)
-            conn.release();
+            conn.release(); //db 연결 해제
     }
 })
 .put("/update", async(req, res, next) => { //자료 수정 요청이 있을 때 업데이트 해줌
     let conn; //db 연결 관련 변수
     const {spendDate, tag, howMuch, memo, o_Tag, o_howMuch, o_memo} = req.body; //front에서 데이터 가져옴 by fetch
-
-    console.log(req.body);
-
+    
     if(memo === `undefined`){
         memo = null;
-    } else if(o_memo === `undefined`){
-        o_memo = null;
-    }
+    } 
 
     try{
         conn = await pool.getConnection();//db 연결
@@ -100,4 +96,4 @@ router
     }
 });
 
-module.exports = router;
+module.exports = router; //내보내주는 코드
