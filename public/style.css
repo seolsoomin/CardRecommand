@@ -6,6 +6,29 @@ body {
     color: #333;
 }
 
+.top-bar {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 20px; 
+    text-align: right;
+}
+
+.login-btn {
+    background: #5B92E5;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.login-btn:hover {
+    background-color: #4a7ed1;
+}
+
 .container {
     display: grid;
     gap: 20px;
@@ -139,8 +162,6 @@ section {
     text-align: center;
 }
 
-/* --- 지출 항목 수정 및 삭제를 위한 새로운 스타일 --- */
-
 .expense-item {
     display: flex;
     justify-content: space-between;
@@ -188,8 +209,6 @@ section {
 .expense-actions button:hover {
     opacity: 0.8;
 }
-
-/* ----------------------------------------------- */
 
 .add-expense-btn {
     display: block;
@@ -381,17 +400,7 @@ section {
     color: #5B92E5;
 }
 
-@media (max-width: 1200px) {
-    .container {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .calendar-section {
-        grid-column: 1 / 3;
-    }
-}
-
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .container {
         grid-template-columns: 1fr;
     }
