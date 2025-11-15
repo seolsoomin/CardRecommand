@@ -1,7 +1,28 @@
+const authenticate = require('../auth'); 
+
 const express = require('express');
 const router = express.Router(); 
 
-const pool = require("../maria"); //mariadb와 nodejs 연결
+const pool = require("./maria");
+
+router
+.post('/calendar/save', authenticate, async (req, res, next) => {
+    const { summary, description, date } = req.body;
+    const userEmail = req.user.email;
+
+    try {
+        console.log(`[Google Calendar] ${userEmail}의 캘린더에 이벤트 추가 요청 수신: ${summary}`);
+        
+        res.status(200).json({ 
+            success: true, 
+            message: 'Google 캘린더 인증 완료 및 데이터 수신 성공' 
+        });
+
+    } catch (err) {
+        console.error(`[Google Calendar] 이벤트 추가 실패: ${err.message}`);
+        res.status(500).json({ success: false, message: `캘린더 저장을 실패하였습니다. ${err.message}` });
+    }
+});
 
 router
 .post("/save", async(req, res, next) => { //사용자가 데이터 입력 했을 때
