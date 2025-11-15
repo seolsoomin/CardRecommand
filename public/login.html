@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    <link rel="stylesheet" href="../public/style.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script> 
+</head>
+<body>
+    <div class="login-container" style="text-align: center; margin-top: 100px;">
+        <h1>신한카드 추천 서비스 로그인</h1>
+        <div id="g_id_onload"
+            data-client_id="237344975800-841jkjk3tq5090t680inm4lv9ats2o4p.apps.googleusercontent.com" 
+            data-callback="handleCredentialResponse"
+            data-auto_prompt="false"
+            data-scope="https://www.googleapis.com/auth/calendar.events"
+        >
+        </div>
+        <div class="g_id_signin"
+            data-type="standard"
+            data-size="large"
+            data-theme="outline"
+            data-text="signin_with"
+            data-shape="rectangular"
+            data-logo_alignment="left"
+        >
+        </div>
+        <p></p>
+        <button class="login-btn" onclick="location.href='/'">Main</button>
+    </div>
+    <script src="../public/script.js"></script>
+</body>
+</html>
