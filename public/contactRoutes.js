@@ -25,6 +25,34 @@ router
 });
 
 router
+.get("/lookup", async(req, res, next) => {//db에서 데이터 불러옴.
+    let conn; //연결 변수
+
+    try{
+        conn = await pool.getConnection(); //db와 연결
+ 
+        const sql = "select date_format(spendDate, '%Y-%m-%d') as spendDate, tag, howMuch, memo from spendtbl"; //sql문
+        const row = await conn.query(sql); //sql문 실행
+
+        console.log(`loading success.`); //로딩이 성공적인걸 알려줌.
+        res.status(200).json({ //성공적으로 가져왔을 시 상태코드를 200으로 지정, 결과 json 지정
+            success : true,
+            spends : row
+        });
+    }
+    catch(err){
+        console.log(`오류 발생 : ${err}`);
+
+        const error = new Error("데이터 조회를 실패하였습니다.");
+        error.status = 500;
+        next(error);
+    }
+    finally{
+        if(conn){
+            conn.release(); //연결해제
+        }
+    }   
+})
 .post("/save", async(req, res, next) => { //사용자가 데이터 입력 했을 때
     let conn; //연결 관련 변수
     const {spendDate, tag, howMuch, memo} = req.body; //body의 정보 가져옴
@@ -72,8 +100,10 @@ router
     try{
         conn = await pool.getConnection(); //db 연결
 
-        await conn.query("DELETE FROM spendtbl WHERE spendDate  = ? AND tag = ? AND howMuch = ? AND memo = ?", [spendDate, tag, howMuch, memo]); //DELETE sql문 실행
+        const sql = `delete from spendtbl where spendDate = ? and tag = ? and howMuch = ? and memo = ?`
+        await conn.query(sql, [spendDate, tag, howMuch, memo]); //DELETE sql문 실행
         
+        console.log(req.body);
         console.log('delete success.'); //삭제 성공 알림 
         res.status(200).json({success : true, message : "삭제 성공"}); //status 200으로 설정하고, json으로 넘김
     }
@@ -91,7 +121,7 @@ router
 })
 .put("/update", async(req, res, next) => { //자료 수정 요청이 있을 때 업데이트 해줌
     let conn; //db 연결 관련 변수
-    const {spendDate, tag, howMuch, memo, o_Tag, o_howMuch, o_memo} = req.body; //front에서 데이터 가져옴 by fetch
+    const {spendDate, tag, howMuch, memo} = req.body; //front에서 데이터 가져옴 by fetch
     
     if(memo === `undefined`){
         memo = null;
@@ -100,7 +130,7 @@ router
     try{
         conn = await pool.getConnection();//db 연결
 
-        await conn.query("UPDATE spendtbl SET tag = ?, howMuch = ?, memo = ? WHERE spendDate = ? AND tag = ?", [tag, howMuch, memo, spendDate, o_Tag, o_howMuch, o_memo]);
+        await conn.query("UPDATE spendtbl SET tag = ?, howMuch = ?, memo = ? WHERE spendDate = ? AND tag = ?", [tag, howMuch, memo, spendDate]);
 
         console.log("update success");
         res.status(200).json({success : true, message : "수정 성공"});
