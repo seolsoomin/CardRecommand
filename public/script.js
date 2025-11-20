@@ -134,11 +134,15 @@ async function saveExpense() {
         if (!expenses[selectedDate]) {
             expenses[selectedDate] = [];
         }
+
+        // console.log(expenseId);
+
         expenses[selectedDate].push(newExpense);
 
         hideExpenseEditor();
         updateExpenseList(selectedDate);
         updateSummary();
+        renderCalendar(currentDate);
         
         if (dbSaved) {
             alert("지출이 성공적으로 저장되고 Google 캘린더에 추가되었습니다.");
@@ -150,15 +154,47 @@ async function saveExpense() {
 }
 
 
-function deleteExpense(date, id) {
+async function deleteExpense(date, id) {
     const expenseIndex = expenses[date].findIndex(e => e.id === id);
+    let deleted = false;
+
     if (expenseIndex > -1) {
         const expenseToDelete = expenses[date][expenseIndex];
                 
         expenses[date].splice(expenseIndex, 1);
         updateExpenseList(date);
         updateSummary();
+
+        try{
+            const response = await fetch("/delete", { //front에서 데이터 넘겨줌. 
+                method : 'PUT', //메소드 DELETE를 사용하는게 옳으나, body를 넘기면 오류가 발생하여 PUT 사용
+                headers: { 'Content-Type': 'application/json' },
+
+                body : JSON.stringify ({ //req.body
+                    spendDate : date,
+                    tag : expenseToDelete.tag,
+                    howMuch : expenseToDelete.amount,
+                    memo : expenseToDelete.memo
+                })
+            });
+
+            const result = await response.json();
+
+            if(response.ok && result.success){
+                console.log(`데이터 삭제 성공`);
+                deleted = true;
+
+            } else {
+                console.error(`삭제 실패 : `, result.message);
+                alert('삭제에 실패했습니다.');
+            }
+        }
+        catch (err) {
+            console.error(`데이터 삭제 중 오류 발생 : `, err);
+            alert(`삭제 중 오류 발생`);
+        }
     }
+
 }
 
 function updateSummary() {
