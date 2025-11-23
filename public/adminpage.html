@@ -6,11 +6,41 @@
     <title>카드 조회/수정/삭제</title>
     <link rel="icon" type="image/png" href="../images/favicon.png">
     <link rel="stylesheet" href="../public/style.css">
-    <style>
+     <style>
+        @font-face {
+    font-family: 'Paperozi';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-display: swap;
+    }
+    body {
+            font-family: 'Paperozi', sans-serif;
+        }
     </style>
 </head>
 <body>
-    
+    <div class="top-bar">
+        <button id="authButton" class="login-btn">Log In</button>
+    </div>
+    <div class="container">
+        <section class="card-input-section">
+            <h3 class="section-title">카드 추가하기</h3>
+            
+            <label for="imageFile">카드 이미지 </label>
+            <input type="file" id="imageFile" accept="image/*">
+            
+            <label for="cardName">카드 이름 </label>
+            <input type="text" id="cardName" placeholder="카드 이름 입력">
+            
+            <button class="add-card-btn">카드 추가</button>
+        </section>
+
+        <div class="card-read-section">
+            <h3 class="section-title">카드 목록</h3>
+            <div class="card-list-container">
+                
+            </div>
+        </div>
 </body>
     <script src="../public/script.js"></script>
 </html>
