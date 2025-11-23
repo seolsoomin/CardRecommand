@@ -1,0 +1,91 @@
+[
+  {
+    "card.name": "신한카드 Hey Young 체크",
+    "card.img": "../images/shinhanCardHeyYoung.png",
+    "tag1": "편의점",
+    "tag2": "쇼핑", 
+    "tag3": "카페/베이커리", 
+    "tag4": "구독",
+    "tag5": "",
+    "benefit1": "",
+    "benefit2": "",
+    "benefit3": "",
+    "benefit4": "",
+    "benefit5": ""
+  },
+  {
+    "card.name": "신한카드 On 체크",
+    "card.img": "../images/shinhanCardOnCheck.png",
+    "tags": ["편의점", "쇼핑", "카페/베이커리", "통신/렌탈", "레저/스포츠"],
+    "tag1": "",
+    "tag2": "",
+    "tag3": "",
+    "tag4": "",
+    "tag5": "",
+    "benefit1": "",
+    "benefit2": "",
+    "benefit3": "",
+    "benefit4": "",
+    "benefit5": ""
+  },
+  {
+    "card.name": "신한카드 Pick E 체크",
+    "card.img": "../images/shinhanCardPickE.png",
+    "tags": ["편의점", "카페/베이커리", "외식/배달"],
+    "benefits": [
+      "4대 편의점(GS25, CU, 세븐일레븐, 이마트 24) 마이 신한 포인트 10% 적립",
+      "커피 업종 이용시 마이 신한 포인트 10% 적립",
+      "월 최다 이용 요식 가맹점 마이 신한 포인트 최대 3천 포인트 적립"
+    ],
+    "tag1": "",
+    "tag2": "",
+    "tag3": "",
+    "tag4": "",
+    "tag5": "",
+    "benefit1": "",
+    "benefit2": "",
+    "benefit3": "",
+    "benefit4": "",
+    "benefit5": ""
+  },
+  {
+    "card.name": "신한카드 Pick I 체크",
+    "card.img": "../images/shinhanCardPickI.png",
+    "tags": ["편의점", "카페/베이커리", "구독", "쇼핑"],
+    "benefits": [
+      "4대 편의점(GS25, CU, 세븐일레븐, 이마트 24) 마이 신한 포인트 10% 적립",
+      "커피 업종 이용시 마이 신한 포인트 10% 적립",
+      "디지털 구독 영역(음악, OTT, 도서) 이용 시 마이신한 포인트 10% 적립",
+      "월 최다 이용 온라인 쇼핑몰 가맹점 마이신한 포인트 최대 3천 포인트 적립"
+    ],
+    "tag1": "",
+    "tag2": "",
+    "tag3": "",
+    "tag4": "",
+    "tag5": "",
+    "benefit1": "",
+    "benefit2": "",
+    "benefit3": "",
+    "benefit4": "",
+    "benefit5": ""
+  },
+  {
+    "card.name": "신한카드 Way 체크",
+    "card.img": "../images/shinhanCardWay.png",
+    "tags": ["편의점", "쇼핑", "카페/베이커리", "통신/렌탈", "레저/스포츠", "대중교통"],
+    "benefits": [
+      "생활편의영역 이용 시 최대 2% 적립",
+      "대중교통(버스/지하철) 이용시 최대 5% 적립"
+    ],
+    "tag1": "",
+    "tag2": "",
+    "tag3": "",
+    "tag4": "",
+    "tag5": "",
+    "benefit1": "",
+    "benefit2": "",
+    "benefit3": "",
+    "benefit4": "",
+    "benefit5": ""
+  }
+]
