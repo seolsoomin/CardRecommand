@@ -376,6 +376,14 @@ async function loadInitialData() {
         updateSummary();
     }
     
+    if (document.getElementById('tag1Select')) {
+        loadCardTagDropdowns();
+    }
+    
+    if (document.querySelector('.card-list-container')) {
+        await loadRegisteredCards(); 
+     }
+
     if (document.querySelector('.card-list-container')) {
         await loadRegisteredCards(); 
     }
@@ -659,4 +667,77 @@ async function loadRegisteredCards() {
 
 function handleCardDblClick(cardId, cardName) {
 
+}
+
+function loadCardTagDropdowns() {
+    const cardTagSelectIds = ['tag1Select', 'tag2Select', 'tag3Select', 'tag4Select', 'tag5Select'];
+    
+    cardTagSelectIds.forEach(selectId => {
+        const tagSelect = document.getElementById(selectId);
+        
+        if (!tagSelect) return; 
+
+        tagSelect.innerHTML = '<option value="" selected>태그를 선택하세요 (선택 사항)</option>';
+        
+        predefinedTags.forEach(tag => {
+            const option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag;
+            tagSelect.appendChild(option);
+        });
+    });
+}
+
+async function addNewCard() {
+    const cardName = document.getElementById('cardName').value.trim();
+    const tag1 = document.getElementById('tag1Select')?.value.trim(); 
+    const tag2 = document.getElementById('tag2Select')?.value.trim(); 
+    const tag3 = document.getElementById('tag3Select')?.value.trim(); 
+    const tag4 = document.getElementById('tag4Select')?.value.trim(); 
+    const tag5 = document.getElementById('tag5Select')?.value.trim(); 
+
+    const benefit1 = document.getElementById('benefit1').value.trim();
+    const benefit2 = document.getElementById('benefit2').value.trim(); 
+    const benefit3 = document.getElementById('benefit3').value.trim(); 
+    const benefit4 = document.getElementById('benefit4').value.trim(); 
+    const benefit5 = document.getElementById('benefit5').value.trim(); 
+
+    const imageFile = document.getElementById('imageFile').files[0];
+    
+    let imageUrl = null;
+    if (imageFile) {
+        imageUrl = `../images/${imageFile.name}`; 
+    }
+
+    if (!cardName) {
+        alert("카드 이름은 필수 입력 항목입니다.");
+        return;
+    }
+
+    const tags = [tag1, tag2, tag3, tag4, tag5].filter(t => t);
+    
+    const newCard = {
+        cardId: `C_${Date.now()}`,
+        name: cardName,
+        tags: tags,
+        benefits: benefit1 || "혜택 정보 없음", 
+        imageUrl: imageUrl,
+    };
+
+    const saveSuccessful = await saveCardToLocalJSON(newCard);
+
+    if (saveSuccessful) {
+        document.getElementById('cardName').value = '';
+        document.getElementById('tag1Select').value = ''; 
+        document.getElementById('tag2Select').value = ''; 
+        document.getElementById('tag3Select').value = ''; 
+        document.getElementById('tag4Select').value = ''; 
+        document.getElementById('tag5Select').value = ''; 
+        document.getElementById('benefit1').value = '';
+        document.getElementById('imageFile').value = '';
+        
+        await loadRegisteredCards(); 
+
+        alert(`카드 '${newCard.name}'이(가) 성공적으로 등록되었습니다.`);
+    }
 }
