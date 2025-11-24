@@ -107,7 +107,9 @@ async function saveExpense() {
         try {
             const dbResponse = await fetch('/save', { 
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${googleIdToken}`
+                 },
                 body: JSON.stringify({ 
                     spendDate: selectedDate, 
                     tag: tag, 
@@ -337,7 +339,12 @@ if (document.getElementById('prevMonth')) {
 
 async function loadInitialData() {
     try {
-        const response = await fetch('/lookup');
+        const response = await fetch('/lookup', {
+            headers : {
+                'Authorization': `Bearer ${googleIdToken}`
+            }
+        });
+    
         const data = await response.json();
         
         if (data.success) {
