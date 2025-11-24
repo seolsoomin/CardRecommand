@@ -30,13 +30,13 @@ function handleCredentialResponse(response) {
     localStorage.setItem('googleIdToken', id_token);
 
     alert("Google 로그인 성공! 메인 페이지로 이동합니다.");
-    window.location.href = 'index.html'; 
+    window.location.href = 'index'; 
 }
 
 async function saveToGoogleCalendar(expenseData) {
     if (!googleIdToken) {
         alert("Google 캘린더에 저장하려면 먼저 로그인해야 합니다. 로그인 페이지로 이동합니다.");
-        window.location.href = 'login.html';
+        window.location.href = 'login';
         return false;
     }
 
@@ -456,7 +456,7 @@ function handleLogout() {
     alert("로그아웃되었습니다.");
 
     updateAuthButton();
-    window.location.href = 'login.html'; 
+    window.location.href = 'login'; 
 }
 
 function updateAuthButton() {
@@ -471,7 +471,7 @@ function updateAuthButton() {
         authButton.classList.add('logout-btn'); 
     } else {
         authButton.textContent = 'Log In';
-        authButton.onclick = () => { location.href='login.html' };
+        authButton.onclick = () => { location.href='login' };
         authButton.classList.remove('logout-btn');
     }
 }
