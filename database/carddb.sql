@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `cardinfotbl` (
   PRIMARY KEY (`cardName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 테이블 데이터 carddb.cardinfotbl:~0 rows (대략적) 내보내기
+-- 테이블 데이터 carddb.cardinfotbl:~7 rows (대략적) 내보내기
 INSERT INTO `cardinfotbl` (`cardName`, `tag`, `tagBenefit`) VALUES
 	('신한카드 Hey Young 체크', '["편의점", "쇼핑", "카페/베이커리", "구독"]', '["최대 5천원 캐시백 제공"]'),
 	('신한카드 On 체크', '["편의점", "쇼핑", "카페/베이커리", "통신/렌탈", "레저/스포츠"]', '["생활편의영역 이용 시 최대 2% 적립"]'),
@@ -32,22 +32,25 @@ INSERT INTO `cardinfotbl` (`cardName`, `tag`, `tagBenefit`) VALUES
 	('신한카드 Way 체크', '["편의점", "쇼핑", "카페/베이커리", "통신/렌탈", "레저/스포츠", "대중교통"]', '["생활편의영역 이용 시 최대 2% 적립", "대중교통(버스/지하철) 이용시 최대 5% 적립"]'),
 	('신한카드 처음 체크', '["편의점", "카페/베이커리", "쇼핑"]', '["5 ~ 7% 적립", "3천 포인트 적립"]');
 
--- 테이블 carddb.recepittbl 구조 내보내기
-CREATE TABLE IF NOT EXISTS `recepittbl` (
-  `tag` varchar(45) NOT NULL,
-  `howMuch` int(11) DEFAULT NULL,
+-- 테이블 carddb.receipttbl 구조 내보내기
+CREATE TABLE IF NOT EXISTS `receipttbl` (
+  `tag` varchar(45) DEFAULT NULL,
   `spendTotal` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 테이블 데이터 carddb.recepittbl:~0 rows (대략적) 내보내기
+-- 테이블 데이터 carddb.receipttbl:~3 rows (대략적) 내보내기
+INSERT INTO `receipttbl` (`tag`, `spendTotal`) VALUES
+	('{}', 0),
+	('{"구독":2000}', 2000),
+	('구독', NULL);
 
 -- 테이블 carddb.spendtbl 구조 내보내기
 CREATE TABLE IF NOT EXISTS `spendtbl` (
   `spendDate` date NOT NULL,
   `tag` varchar(45) NOT NULL,
-  `howMuch` int(11) DEFAULT NULL,
-  `memo` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`tag`)
+  `howMuch` int(11) NOT NULL,
+  `memo` varchar(45) DEFAULT NULL,
+  `userID` varchar(230) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 테이블 데이터 carddb.spendtbl:~0 rows (대략적) 내보내기
