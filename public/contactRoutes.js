@@ -25,14 +25,15 @@ router
 });
 
 router
-.get("/lookup", async(req, res, next) => {//db에서 데이터 불러옴.
+.get("/lookup", authenticate, async(req, res, next) => {//db에서 데이터 불러옴.
     let conn; //연결 변수
+    userId = req.user.email;
 
     try{
         conn = await pool.getConnection(); //db와 연결
  
-        const sql = "select date_format(spendDate, '%Y-%m-%d') as spendDate, tag, howMuch, memo from spendtbl"; //sql문
-        const row = await conn.query(sql); //sql문 실행
+        const sql = "select date_format(spendDate, '%Y-%m-%d') as spendDate, tag, howMuch, memo from spendtbl where userID = ?"; //sql문
+        const row = await conn.query(sql, userId); //sql문 실행
 
         console.log(`loading success.`); //로딩이 성공적인걸 알려줌.
         res.status(200).json({ //성공적으로 가져왔을 시 상태코드를 200으로 지정, 결과 json 지정
@@ -53,9 +54,10 @@ router
         }
     }   
 })
-.post("/save", async(req, res, next) => { //사용자가 데이터 입력 했을 때
+.post("/save", authenticate, async(req, res, next) => { //사용자가 데이터 입력 했을 때, 사용자 별로 저장
     let conn; //연결 관련 변수
     const {spendDate, tag, howMuch, memo} = req.body; //body의 정보 가져옴
+    const userID = req.user.email;
 
     try{
         conn = await pool.getConnection(); //db 연결
@@ -72,7 +74,7 @@ router
             next(error);
         }
 
-        const sql = await conn.query("INSERT INTO spendtbl (spendDate, tag, howMuch, memo) VALUES (?, ?, ?, ?)", [spendDate, tag, howMuch, memo]); //db에서 sql문 실행과 ?에 대한 인자.
+        const sql = await conn.query("INSERT INTO spendtbl (userID, spendDate, tag, howMuch, memo) VALUES (?, ?, ?, ?, ?)", [userID, spendDate, tag, howMuch, memo]); //db에서 sql문 실행과 ?에 대한 인자.
 
         console.log("save success."); //성공 했을음 출력
         res.status(201).json({success : true, message : "저장 성공"}); //201 상태 설정하고, json으로 응답 넘김.
