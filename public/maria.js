@@ -1,8 +1,8 @@
 const mariadb = require('mariadb');
 
 const pool = mariadb.createPool({
-    host : '192.168.0.44',
-    user : 'remote_user',
+    host : '127.0.0.1',
+    user : 'root',
     port : 3307,
     password : '1234',
     database : 'carddb',
