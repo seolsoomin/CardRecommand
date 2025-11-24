@@ -16,15 +16,20 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html")); 
 });
 
-app.get("/login.html", (req, res) => {
+app.get("/login", (req, res) => {
     res.status(200);
     res.sendFile(path.join(__dirname, "login.html")); 
 });
 
-app.get("/index.html", (req, res) => {
+app.get("/index", (req, res) => {
     res.status(200);
     res.sendFile(path.join(__dirname, "index.html")); 
 });
+
+app.get("/admin", (req,res) =>{
+    res.status(200);
+    res.sendFile(path.join(__dirname, "adminpage.html"));
+})
 
 app.use("/", require("./contactRoutes.js")); //router 사용 선언
 
