@@ -202,14 +202,22 @@ function updateSummary() {
     const tagTotals = {};
     let grandTotal = 0;
 
+    const year = currentDate.getFullYear(); //년도 가져옴
+    const month = currentDate.getMonth() + 1; //현제 월 가져옴. (0부터 시작하기 때문에 + 1 필요)
+    const monthKeyPrefix = `${year}-${String(month).padStart(2, '0')}`; //yyyy-mm 형태의 문자열 생성
+
     for (const date in expenses) {
-        expenses[date].forEach(expense => {
-            const tag = expense.tag;
-            const amount = expense.amount;
+
+        if(date.startsWith(monthKeyPrefix)){ //만약 날자의 지금 보는 페이지의 년도와 월이 일치하면 나오게 설정.
+                expenses[date].forEach(expense => {
+                const tag = expense.tag;
+                const amount = expense.amount;
             
-            tagTotals[tag] = (tagTotals[tag] || 0) + amount;
-            grandTotal += amount;
-        });
+                tagTotals[tag] = (tagTotals[tag] || 0) + amount;
+                grandTotal += amount;
+            });
+        }
+
     }
 
     const tagSummaryList = document.getElementById('tagSummaryList');
@@ -396,8 +404,29 @@ if (document.querySelector('.recommend-btn')) {
         const recommendationsDiv = document.getElementById('cardRecommendations');
         recommendationsDiv.innerHTML = '카드 추천 로직 실행 중...';
 
-        const allCards = await loadCardData(); 
+       try{
+            const response = await fetch("/card/recommend", {
+                headers : {
+                    'Authorization': `Bearer ${googleIdToken}` 
+                }
+            });
+            
+            const data = await response.json();
 
+            if(data.success && data.recommandation){
+                renderCardRecommendations(data.recommandation);
+            } else{
+                recommendationsDiv.innerHTML = '<p style="text-align: center; color: #999; padding: 15px;">추천 카드를 찾지 못했습니다.</p>';
+            }
+
+       }catch (err) {
+            console.error(`에러 발생 : ${err}`);
+            recommendationsDiv.innerHTML = '<p>서버 오류 발생</p>';
+       }
+
+        /*
+        const allCards = await loadCardData(); 
+        
         if (allCards.length === 0) {
             recommendationsDiv.innerHTML = '<p>추천 가능한 카드 목록이 없습니다. cardList.json 파일을 확인하세요.</p>';
             return;
@@ -451,8 +480,11 @@ if (document.querySelector('.recommend-btn')) {
         const topCards = cardsWithBenefit
             .sort((a, b) => b.maxBenefit - a.maxBenefit)
             .slice(0, 3);
+
+        console.log(topCards);
             
         renderCardRecommendations(topCards); 
+        */
     });
 }
 
@@ -518,7 +550,7 @@ function renderCardRecommendations(topCards) {
 
 async function loadCardData() {
     try {
-        const response = await fetch('../cardList.json'); 
+        const response = await fetch('/card/load'); 
         
         if (!response.ok) {
             console.error(`카드 목록 로드 실패: ${response.status}`);
@@ -571,11 +603,11 @@ async function saveCardToLocalJSON(newCard) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newCard)
         });
-
+        
         const result = await response.json();
 
         if (response.ok && result.success) {
-            console.log("새 카드 DB 저장 성공:", newCard.name);
+            console.log("새 카드 DB 저장 성공:", newCard['card.name']);
             return true;
         } else {
             console.error("새 카드 DB 저장 실패:", result.message);
@@ -588,44 +620,6 @@ async function saveCardToLocalJSON(newCard) {
         return false;
     }
 }
-async function addNewCard() {
-    const cardName = document.getElementById('cardName').value.trim();
-    const tag1 = document.getElementById('tag1').value.trim(); 
-    const benefit1 = document.getElementById('benefit1').value.trim(); 
-    const imageFile = document.getElementById('imageFile').files[0];
-    
-    let imageUrl = null;
-    if (imageFile) {
-        imageUrl = `../images/${imageFile.name}`; 
-    }
-
-    if (!cardName) {
-        alert("카드 이름은 필수 입력 항목입니다.");
-        return;
-    }
-
-    const newCard = {
-        cardId: `C_${Date.now()}`,
-        name: cardName,
-        tags: [tag1].filter(t => t), 
-        benefits: benefit1 || "혜택 정보 없음", 
-        imageUrl: imageUrl,
-    };
-
-    const saveSuccessful = await saveCardToLocalJSON(newCard);
-
-    if (saveSuccessful) {
-        document.getElementById('cardName').value = '';
-        document.getElementById('tag1').value = '';
-        document.getElementById('benefit1').value = '';
-        document.getElementById('imageFile').value = '';
-        
-        await loadRegisteredCards(); 
-
-        alert(`카드 '${newCard.name}'이(가) 성공적으로 등록되었습니다.`);
-    }
-}
-
 
 async function loadRegisteredCards() {
     const cardListContainer = document.querySelector('.card-list-container');
@@ -690,6 +684,7 @@ function loadCardTagDropdowns() {
 
 async function addNewCard() {
     const cardName = document.getElementById('cardName').value.trim();
+
     const tag1 = document.getElementById('tag1Select')?.value.trim(); 
     const tag2 = document.getElementById('tag2Select')?.value.trim(); 
     const tag3 = document.getElementById('tag3Select')?.value.trim(); 
@@ -717,12 +712,16 @@ async function addNewCard() {
     const tags = [tag1, tag2, tag3, tag4, tag5].filter(t => t);
     
     const newCard = {
-        cardId: `C_${Date.now()}`,
-        name: cardName,
-        tags: tags,
-        benefits: benefit1 || "혜택 정보 없음", 
-        imageUrl: imageUrl,
-    };
+        "card.name": cardName,
+        "card.img": imageUrl,
+        "benefits": benefit1 || [],
+    
+        "tag1": tag1 || "", "benefit1": benefit1,
+        "tag2": tag2 || "", "benefit2": benefit2,
+        "tag3": tag3 || "", "benefit3": benefit3,
+        "tag4": tag4 || "", "benefit4": benefit4,
+        "tag5": tag5 || "", "benefit5": benefit5
+    };  
 
     const saveSuccessful = await saveCardToLocalJSON(newCard);
 
@@ -734,10 +733,14 @@ async function addNewCard() {
         document.getElementById('tag4Select').value = ''; 
         document.getElementById('tag5Select').value = ''; 
         document.getElementById('benefit1').value = '';
+        document.getElementById('benefit2').value = '';
+        document.getElementById('benefit3').value = '';
+        document.getElementById('benefit4').value = '';
+        document.getElementById('benefit5').value = '';
         document.getElementById('imageFile').value = '';
         
         await loadRegisteredCards(); 
 
-        alert(`카드 '${newCard.name}'이(가) 성공적으로 등록되었습니다.`);
+        alert(`카드 '${newCard['card.name']}'이(가) 성공적으로 등록되었습니다.`);
     }
 }
