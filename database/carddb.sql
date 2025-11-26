@@ -16,21 +16,19 @@
 
 -- 테이블 carddb.cardinfotbl 구조 내보내기
 CREATE TABLE IF NOT EXISTS `cardinfotbl` (
-  `cardName` varchar(45) NOT NULL,
-  `tag` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`tag`)),
-  `tagBenefit` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`tagBenefit`)),
+  `cardName` varchar(100) NOT NULL,
+  `imageUrl` varchar(255) NOT NULL,
+  `benefits` text DEFAULT NULL,
   PRIMARY KEY (`cardName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 테이블 데이터 carddb.cardinfotbl:~7 rows (대략적) 내보내기
-INSERT INTO `cardinfotbl` (`cardName`, `tag`, `tagBenefit`) VALUES
-	('신한카드 Hey Young 체크', '["편의점", "쇼핑", "카페/베이커리", "구독"]', '["최대 5천원 캐시백 제공"]'),
-	('신한카드 On 체크', '["편의점", "쇼핑", "카페/베이커리", "통신/렌탈", "레저/스포츠"]', '["생활편의영역 이용 시 최대 2% 적립"]'),
-	('신한카드 Pick E 체크', '["편의점", "카페/베이커리", "외식/배달"]', '["4대 편의점(GS25, CU, 세븐일레븐, 이마트 24) 마이 신한 포인트 10% 적립", "커피 업종 이용시 마이 신한 포인트 10% 적립", "월 최다 이용 요식 가맹점 마이 신한 포인트 최대 3천 포인트 적립"]'),
-	('신한카드 Pick I 체크', '["편의점", "카페/베이커리", "구독", "쇼핑"]', '["4대 편의점(GS25, CU, 세븐일레븐, 이마트 24) 마이 신한 포인트 10% 적립", "커피 업종 이용시 마이 신한 포인트 10% 적립", "디지털 구독 영역(음악, OTT, 도서) 이용 시 마이신한 포인트 10% 적립", "월 최다 이용 온라인 쇼핑몰 가맹점 마이신한 포인트 최대 3천 포인트 적립"]'),
-	('신한카드 Point Plan 체크', '["편의점", "외식/배달"]', '["CU, GS25, 세븐일레븐 이용금약 5% 적립", "주말 배달비 건당 2만원 이상 결제 시 1천 포인트 적립"]'),
-	('신한카드 Way 체크', '["편의점", "쇼핑", "카페/베이커리", "통신/렌탈", "레저/스포츠", "대중교통"]', '["생활편의영역 이용 시 최대 2% 적립", "대중교통(버스/지하철) 이용시 최대 5% 적립"]'),
-	('신한카드 처음 체크', '["편의점", "카페/베이커리", "쇼핑"]', '["5 ~ 7% 적립", "3천 포인트 적립"]');
+-- 테이블 데이터 carddb.cardinfotbl:~0 rows (대략적) 내보내기
+INSERT INTO `cardinfotbl` (`cardName`, `imageUrl`, `benefits`) VALUES
+	('신한카드 Hey Young 체크', '../images/shinhanCardHeyYoung.png', '최대 5000원 캐시백 제공'),
+	('신한카드 On 체크', '../images/shinhanCardOnCheck.png', '생활편의영역 이용 시 최대 2% 적립'),
+	('신한카드 Pick E 체크', '../images/shinhanCardPickE.png', '4대 편의점(GS25, CU, 세븐일레븐, 이마트 24) 마이 신한 포인트 10% 적립 ,커피 업종 이용시 마이 신한 포인트 10% 적립, 월 최다 이용 요식 가맹점 마이 신한 포인트 최대 3천 포인트 적립'),
+	('신한카드 Pick I 체크', '../images/shinhanCardPickI.png', '4대 편의점(GS25, CU, 세븐일레븐, 이마트 24) 마이 신한 포인트 10% 적립, 커피 업종 이용시 마이 신한 포인트 10% 적립, 디지털 구독 영역(음악, OTT, 도서) 이용 시 마이신한 포인트 10% 적립, 월 최다 이용 온라인 쇼핑몰 가맹점 마이신한 포인트 최대 3천 포인트 적립'),
+	('신한카드 Way 체크', '../images/shinhanCardWay.png', '생활편의영역 이용 시 최대 2% 적립, 대중교통(버스/지하철) 이용시 최대 5% 적립');
 
 -- 테이블 carddb.cardjsontbl 구조 내보내기
 CREATE TABLE IF NOT EXISTS `cardjsontbl` (
@@ -55,28 +53,48 @@ CREATE TABLE IF NOT EXISTS `spendtbl` (
   `userID` varchar(230) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 테이블 데이터 carddb.spendtbl:~18 rows (대략적) 내보내기
-INSERT INTO `spendtbl` (`spendDate`, `tag`, `howMuch`, `memo`, `userID`) VALUES
-	('2025-11-07', '편의점', 3000, '', 'son2497474@gmail.com'),
-	('2025-11-01', '카페/베이커리', 9000, '', 'son2497474@gmail.com'),
-	('2025-11-22', '쇼핑', 80000, '', 'son2497474@gmail.com'),
-	('2025-11-12', '편의점', 3000, '', 'son2497474@gmail.com'),
-	('2025-11-10', '대형마트', 5000, '과자 쇼핑', 'son2497474@gmail.com'),
-	('2025-11-06', '외식/배달', 8000, '', 'son2497474@gmail.com'),
-	('2025-11-11', '외식/배달', 6000, '학식', 'son2497474@gmail.com'),
-	('2025-11-11', '카페/베이커리', 4400, '', 'son2497474@gmail.com'),
-	('2025-11-29', '대중교통', 8400, '시외버스(왕복)', 'son2497474@gmail.com'),
-	('2025-11-24', '구독', 7000, '넷플', 'son2497474@gmail.com'),
-	('2025-11-04', '편의점', 5500, '점심', 'son2497474@gmail.com'),
-	('2025-11-11', '쇼핑', 20000, '', 'modney2911@gmail.com'),
-	('2025-11-14', '대중교통', 4200, '시외버스', 'modney2911@gmail.com'),
-	('2025-11-14', '영화/공연', 8000, '영화', 'modney2911@gmail.com'),
-	('2025-11-08', '쇼핑', 40000, '쇼핑', 'modney2911@gmail.com'),
-	('2025-11-02', '외식/배달', 12300, '스파게티', 'son2497474@gmail.com'),
-	('2025-11-28', '카페/베이커리', 4700, '먹을만 했따?', 'son2497474@gmail.com'),
-	('2025-11-20', '쇼핑', 90000, '취미생활용', 'son2497474@gmail.com'),
-	('2025-11-19', '쇼핑', 60000, '^0^', 'son2497474@gmail.com');
+-- 테이블 carddb.tagtbl 구조 내보내기
+CREATE TABLE IF NOT EXISTS `tagtbl` (
+  `cardName` varchar(100) NOT NULL,
+  `tag` varchar(50) NOT NULL,
+  `benefitVal` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`cardName`,`tag`),
+  CONSTRAINT `tagtbl_ibfk_1` FOREIGN KEY (`cardName`) REFERENCES `cardinfotbl` (`cardName`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- 테이블 데이터 carddb.tagtbl:~0 rows (대략적) 내보내기
+INSERT INTO `tagtbl` (`cardName`, `tag`, `benefitVal`) VALUES
+	('신한카드 Hey Young 체크', '구독', '5000'),
+	('신한카드 Hey Young 체크', '쇼핑', '5000'),
+	('신한카드 Hey Young 체크', '카페/베이커리', '5000'),
+	('신한카드 Hey Young 체크', '편의점', '5000'),
+	('신한카드 On 체크', '레저/스포츠', '2%'),
+	('신한카드 On 체크', '쇼핑', '2%'),
+	('신한카드 On 체크', '카페/베이커리', '2%'),
+	('신한카드 On 체크', '통신/렌탈', '2%'),
+	('신한카드 On 체크', '편의점', '2%'),
+	('신한카드 Pick E 체크', '외식/배달', '3000'),
+	('신한카드 Pick E 체크', '카페/베이커리', '10%'),
+	('신한카드 Pick E 체크', '편의점', '10%'),
+	('신한카드 Pick I 체크', '구독', '10%'),
+	('신한카드 Pick I 체크', '쇼핑', '3000'),
+	('신한카드 Pick I 체크', '카페/베이커리', '10%'),
+	('신한카드 Pick I 체크', '편의점', '10%'),
+	('신한카드 Way 체크', '대중교통', '5%'),
+	('신한카드 Way 체크', '레저/스포츠', '2%'),
+	('신한카드 Way 체크', '카페/베이커리', '2%'),
+	('신한카드 Way 체크', '통신/렌탈', '2%'),
+	('신한카드 Way 체크', '편의점', '2%');
+
+-- 테이블 carddb.userspendtbl 구조 내보내기
+CREATE TABLE IF NOT EXISTS `userspendtbl` (
+  `userEmail` varchar(230) NOT NULL,
+  `tag` varchar(50) NOT NULL,
+  `totalSpend` bigint(20) DEFAULT 0,
+  PRIMARY KEY (`userEmail`,`tag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 테이블 데이터 carddb.userspendtbl:~9 rows (대략적) 내보내기
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
